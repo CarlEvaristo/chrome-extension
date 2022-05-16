@@ -1,20 +1,34 @@
+// chrome://extensions/
 let myArray = []
+
 const inputEl = document.getElementById("input-el")
 const btnEl = document.getElementById("input-btn")
 const ulEl = document.getElementById("ul-el")
+const delBtnEl = document.getElementById("delete-btn")
 
-function clickHandler() {
-    console.log("Button clicked!")
+let leadsFromLocalStorage = JSON.parse(localStorage.getItem("myLeads"))
+
+if (Boolean(leadsFromLocalStorage)) {
+    myArray = leadsFromLocalStorage;
+    renderLeads()
 }
 
 btnEl.addEventListener("click", function() { 
     myArray.push(inputEl.value);
+    localStorage.setItem("myLeads", JSON.stringify(myArray))
     inputEl.value = ""
+    renderLeads()
+})
+
+delBtnEl.addEventListener("click", function() {
+    localStorage.removeItem("myLeads")
+    myArray = []
     renderLeads()
 })
 
 function renderLeads() {
     let listItems = ""
+
     for (let i = 0; i < myArray.length; i++) {
         listItems += `
         <li>
@@ -22,16 +36,6 @@ function renderLeads() {
         </li>`
     }
     ulEl.innerHTML = listItems
-
-//     ulEl.textContent = ""
-//     for (let i = 0; i < myArray.length; i++) {
-//         const liEl = document.createElement("li")
-//         const aEl = document.createElement("a")
-//         aEl.textContent = myArray[i]
-//         aEl.setAttribute("href", "https://" + myArray[i]) 
-//         aEl.setAttribute("target", "_blank") 
-//         liEl.append(aEl)
-//         ulEl.append(liEl)
-//     }
-
 }
+
+
